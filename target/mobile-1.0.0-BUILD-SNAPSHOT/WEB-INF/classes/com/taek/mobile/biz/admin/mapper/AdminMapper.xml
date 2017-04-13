@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.taek.mobile.biz.admin.mapper.AdminMapper">
+
+	<select id="selectNameList" resultType="HashMap">
+	SELECT NAME FROM test1
+	</select>
+	
+	<insert id="insertName" parameterType="string">
+		Insert into test1 values("11","dd")
+	</insert>
+
+</mapper>

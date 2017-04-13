@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<beans:beans 
+	xmlns="http://www.springframework.org/schema/security" 
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/security 
+	http://www.springframework.org/schema/security/spring-security.xsd "> 
+
+	<!-- <beans:bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" /> -->
+
+	
+	<http auto-config="true" use-expressions="true" disable-url-rewriting="true"> 
+		<form-login 
+			
+			username-parameter="uid" 
+			password-parameter="pwd" 
+			default-target-url="/" 
+			always-use-default-target="false" 
+		/> 
+			
+		<logout 
+			invalidate-session="true" 
+			logout-success-url="/" 
+			logout-url="/signout" 
+		/>
+		
+		<session-management>
+			<concurrency-control max-sessions="1" expired-url="/login_duplicate"/>
+		</session-management>
+	
+	</http> 
+	
+	
+	<authentication-manager> 
+		<authentication-provider>
+			<password-encoder ref="bcryptPasswordEncoder" /> 
+			<jdbc-user-service data-source-ref="dataSource"
+				users-by-username-query=
+				"select USER_LOGIN AS username, USER_PASS AS password, 	USER_STATUS AS enabled 
+				from users 
+				where USER_LOGIN=? and USER_STATUS = 1"
+				
+				authorities-by-username-query=
+				"select ID,USER_PERMIT AS authority 
+				from users 
+				where USER_LOGIN=? and USER_STATUS = 1"
+			/> 
+		</authentication-provider> 
+	</authentication-manager>
+	
+	<beans:bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" /> 
+
+</beans:beans>
+

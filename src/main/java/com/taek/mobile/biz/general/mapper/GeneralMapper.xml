@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.taek.mobile.biz.general.mapper.GeneralMapper">
+
+<select id="getBoardGrp" resultType="BoardGrp">
+SELECT BG_NO, BG_NAME FROM BOARD_GRP;
+</select>
+
+<select id="getBoard" resultType="Board" parameterType="int">
+SELECT 
+B_NO, B_BGNO, B_NAME 
+FROM BOARD
+WHERE B_BGNO = #{bg_no};
+</select>
+
+<select id="getPost" parameterType="int" resultType="Post">
+SELECT 
+P.P_NO, P.P_TITLE, P.P_CONTENT, P.P_DATE, U.U_USERID 
+FROM POST AS P , USERS AS U
+WHERE 
+P.P_BNO = #{bNo} AND U.U_NO = P.P_UID 
+ORDER BY P.P_NO DESC LIMIT 0,5;
+</select>
+
+<select id="getRecentPost" resultType="Post">
+SELECT P_NO, P_TITLE 
+FROM POST  
+ORDER BY  P_NO DESC  
+LIMIT 0,5;
+</select>
+
+<select id="getRecentComment" resultType="Comment">
+SELECT C.C_CONTENT, P.P_NO 
+FROM COMMENT AS C, POST AS P 
+WHERE C.C_PNO = P.P_NO 
+ORDER BY C.C_NO DESC 
+LIMIT 0,5 
+</select>
+
+</mapper>
